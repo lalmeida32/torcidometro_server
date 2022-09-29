@@ -15,8 +15,8 @@ public class FindPlaceResponse {
   public static FindPlaceResponse fromEntity(Place entity) {
     return new FindPlaceResponse(
         entity.getId(),
-        entity.getLatitude(),
-        entity.getLongitude(),
+        entity.getLocation().getX(),
+        entity.getLocation().getY(),
         entity.getName());
   }
 

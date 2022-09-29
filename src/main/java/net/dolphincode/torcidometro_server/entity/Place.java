@@ -1,6 +1,9 @@
 package net.dolphincode.torcidometro_server.entity;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
+import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
+import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Getter;
@@ -12,13 +15,13 @@ public class Place {
   @Id
   private String id;
 
-  private double latitude;
-  private double longitude;
+  @GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE)
+  private GeoJsonPoint location;
+
   private String name;
 
-  public Place(double latitude, double longitude, String name) {
+  public Place(GeoJsonPoint location, String name) {
     this.name = name;
-    this.latitude = latitude;
-    this.longitude = longitude;
+    this.location = new GeoJsonPoint(location.getX(), location.getY());
   }
 }
