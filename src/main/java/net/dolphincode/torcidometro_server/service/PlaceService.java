@@ -34,6 +34,11 @@ public class PlaceService {
   }
 
   public FindPlaceResponse create(CreatePlaceRequestBody body) {
+    if (body.getLatitude() < 0)
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Latitude should be greater or equal than 0");
+    if (body.getLatitude() > 90)
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Latitude should be less or equal than 90");
+
     Place saved = placeRepository.save(new Place(body.getLatitude(), body.getLongitude(), body.getName()));
     return new FindPlaceResponse(saved.getId(), saved.getLatitude(), saved.getLongitude(), saved.getName());
   }

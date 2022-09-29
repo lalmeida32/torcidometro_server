@@ -2,6 +2,7 @@ package net.dolphincode.torcidometro_server.response.places;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import net.dolphincode.torcidometro_server.entity.Place;
 
 @Getter
 @AllArgsConstructor
@@ -10,4 +11,13 @@ public class FindPlaceResponse {
   private double latitude;
   private double longitude;
   private String name;
+
+  public static FindPlaceResponse fromEntity(Place entity) {
+    return new FindPlaceResponse(
+        entity.getId(),
+        entity.getLatitude(),
+        entity.getLongitude(),
+        entity.getName());
+  }
+
 }
