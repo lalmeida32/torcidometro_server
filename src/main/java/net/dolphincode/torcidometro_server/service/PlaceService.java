@@ -44,7 +44,10 @@ public class PlaceService {
     if (body.getName().length() < 5)
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name should have at least 5 characters");
 
-    System.out.println(placeRepository.customFindNear(body.getLongitude(), body.getLatitude(), 111000));
+    var close = placeRepository.customFindNear(body.getLongitude(), body.getLatitude(), 5, 1);
+    if (close.size() > 0)
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+          "This place is too close of \"" + close.get(0).getName() + "\"");
 
     Place saved = placeRepository
         .save(new Place(new GeoJsonPoint(body.getLongitude(), body.getLatitude()), body.getName()));

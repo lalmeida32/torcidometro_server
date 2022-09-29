@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Arrays;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +19,7 @@ import org.mockito.Mockito;
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -50,7 +53,7 @@ public class PlaceServiceTest extends ApplicationConfigTest {
       double longitude = 1.0;
       String name = "Place Name";
 
-      place = new Place(latitude, longitude, name);
+      place = new Place(new GeoJsonPoint(latitude, longitude), name);
       ReflectionTestUtils.setField(place, "id", "63b0cd000000000000000000");
 
       request = new CreatePlaceRequestBody(latitude, longitude, name);
@@ -74,7 +77,7 @@ public class PlaceServiceTest extends ApplicationConfigTest {
     @Test
     @DisplayName("It should throw a bad request exception when longitude is less than -180")
     public void longitudeLessThanZero() {
-      falseTrueTest("location", -180.01, -180.0);
+      falseTrueTest("longitude", -180.01, -180.0);
     }
 
     @Test
@@ -102,9 +105,16 @@ public class PlaceServiceTest extends ApplicationConfigTest {
     }
 
     @Test
-    @DisplayName("It should throw a bad request exception when place is less than 3 meters distance of another saved place")
-    public void threeMetersAwayOfAnotherPlace() {
-      // Mockito.when(placeRepository.exists(ArgumentMatchers.any())).thenReturn(true);
+    @DisplayName("It should throw a bad request exception when place is less than 5 meters distance of another saved place")
+    public void fiveMetersAwayOfAnotherPlace() {
+
+      // var places = Arrays.asList(place);
+
+      // Mockito.when(placeRepository.customFindNear(
+      // ArgumentMatchers.(),
+      // ArgumentMatchers.any(),
+      // ArgumentMatchers.any(),
+      // ArgumentMatchers.any())).thenReturn(places);
       // var exception = assertThrows(ResponseStatusException.class, () ->
       // placeService.create(request));
       // assertEquals(exception.getStatus(), HttpStatus.BAD_REQUEST);
