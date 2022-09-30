@@ -108,16 +108,16 @@ public class PlaceServiceTest extends ApplicationConfigTest {
     @DisplayName("It should throw a bad request exception when place is less than 5 meters distance of another saved place")
     public void fiveMetersAwayOfAnotherPlace() {
 
-      // var places = Arrays.asList(place);
+      var places = Arrays.asList(place);
 
-      // Mockito.when(placeRepository.customFindNear(
-      // ArgumentMatchers.(),
-      // ArgumentMatchers.any(),
-      // ArgumentMatchers.any(),
-      // ArgumentMatchers.any())).thenReturn(places);
-      // var exception = assertThrows(ResponseStatusException.class, () ->
-      // placeService.create(request));
-      // assertEquals(exception.getStatus(), HttpStatus.BAD_REQUEST);
+      Mockito.when(placeRepository.customFindNear(
+      ArgumentMatchers.eq(request.getLongitude()),
+      ArgumentMatchers.eq(request.getLatitude()),
+      ArgumentMatchers.anyInt(),
+      ArgumentMatchers.anyInt())).thenReturn(places);
+      var exception = assertThrows(ResponseStatusException.class, () ->
+      placeService.create(request));
+      assertEquals(exception.getStatus(), HttpStatus.BAD_REQUEST);
     }
 
     @Test
